@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tom ❤️ Lena</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* { box-sizing:border-box; }
+
+body {
+    margin:0;
+    min-height:100vh;
+    font-family:"Segoe UI", sans-serif;
+    background:radial-gradient(circle at top,#ffe5ef,#fff 45%,#ffd1e3);
+    color:#5a1a35;
+    overflow-x:hidden;
+}
+
+.container {
+    max-width:1000px;
+    margin:auto;
+    padding:40px 20px;
+    text-align:center;
+}
+
+h1 {
+    font-size:3em;
+    color:#c2185b;
+    margin-bottom:10px;
+}
+
+.subtitle {
+    font-size:1.2em;
+    font-style:italic;
+    margin-bottom:40px;
+}
+
+.cards {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+.card {
+    background:rgba(255,255,255,.82);
+    border-radius:25px;
+    padding:30px 20px;
+    box-shadow:0 10px 30px rgba(150,40,80,.15);
+    backdrop-filter:blur(10px);
+    transition:.3s;
+}
+
+.card:hover {
+    transform:translateY(-8px);
+}
+
+.card h2 {
+    color:#d81b60;
+}
+
+.date {
+    opacity:.7;
+    font-size:.9em;
+    margin-bottom:20px;
+}
+
+.timer {
+    font-size:1.35em;
+    font-weight:bold;
+    line-height:1.7;
+}
+
+.message {
+    margin-top:15px;
+    color:#8b3152;
+}
+
+footer {
+    margin-top:50px;
+    font-style:italic;
+}
+
+
+.cursor-heart {
+    position:fixed;
+    pointer-events:none;
+    animation:fade 1s forwards;
+    z-index:999;
+}
+
+@keyframes fade {
+    from {
+        opacity:1;
+        transform:scale(1);
+    }
+    to {
+        opacity:0;
+        transform:translateY(-40px) scale(1.8);
+    }
+}
+
+
+.floating-heart {
+    position:fixed;
+    bottom:-20px;
+    animation:float linear forwards;
+    opacity:.5;
+    pointer-events:none;
+}
+
+@keyframes float {
+    to {
+        transform:translateY(-110vh) scale(1.5);
+        opacity:0;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+<h1>Our Love Story ❤️</h1>
+
+<div class="subtitle">
+Кожна мить разом це маленька частинка вічності ✨
+</div>
+
+
+<div class="cards">
+
+
+<div class="card">
+<h2>❤️ Since we met</h2>
+<div class="date">21 March 2026 · 20:00</div>
+<div class="timer" id="met"></div>
+<div class="message">
+Some small salsa steps can make a big difference 💃🕺
+</div>
+</div>
+
+
+<div class="card">
+<h2>🌹 First date</h2>
+<div class="date">10 April 2026 · 18:00</div>
+<div class="timer" id="date"></div>
+<div class="message">
+Restaurant 1910 in Eindhoven, we like food 😋
+</div>
+</div>
+
+
+<div class="card">
+<h2>💋 First kiss</h2>
+<div class="date">22 April 2026 · 20:00</div>
+<div class="timer" id="kiss"></div>
+<div class="message">
+Who kissed who?? 😜
+</div>
+</div>
+
+
+<div class="card">
+<h2>🤞 Pinky promise</h2>
+<div class="date">28 June 2026 · 22:00</div>
+<div class="timer" id="promise"></div>
+<div class="message">
+You know what this means 😅
+</div>
+</div>
+
+
+<div class="card">
+<h2>🌴 Second honeymoon</h2>
+<div class="date">17 September 2026 · 06:00</div>
+<div class="timer" id="honeymoon"></div>
+<div class="message">
+Let's explore Kos! ✈️
+</div>
+</div>
+
+
+<div class="card">
+<h2>🎂 Lena's birthday</h2>
+<div class="date">03 October 2026</div>
+<div class="timer" id="birthday"></div>
+<div class="message">
+A special day for a very special person ❤️
+</div>
+</div>
+
+
+</div>
+
+
+<footer>
+Створено з любов’ю ❤️
+</footer>
+
+</div>
+
+
+
+<script>
+
+const sinceMoments = {
+    met:"2026-03-21T20:00:00+01:00",
+    date:"2026-04-10T18:00:00+01:00",
+    kiss:"2026-04-22T20:00:00+01:00",
+    promise:"2026-06-28T22:00:00+01:00"
+};
+
+
+const countdowns = {
+    honeymoon:"2026-09-17T06:00:00+01:00",
+    birthday:"2026-10-03T00:00:00+01:00"
+};
+
+
+function formatDiff(start) {
+
+    let diff=new Date()-new Date(start);
+
+    let minutes=Math.floor(diff/60000);
+    let hours=Math.floor(minutes/60);
+    let days=Math.floor(hours/24);
+
+    let years=Math.floor(days/365);
+    days%=365;
+
+    let months=Math.floor(days/30);
+    days%=30;
+
+    hours%=24;
+    minutes%=60;
+
+    return `
+    ${months} months<br>
+    ${days} days<br>
+    ${hours} hours<br>
+    ${minutes} minutes`;
+}
+
+
+
+function formatCountdown(target) {
+
+    let diff=new Date(target)-new Date();
+
+    if(diff<=0)
+        return "❤️ The moment has arrived!";
+
+    let seconds=Math.floor(diff/1000);
+
+    let days=Math.floor(seconds/86400);
+    seconds%=86400;
+
+    let hours=Math.floor(seconds/3600);
+    seconds%=3600;
+
+    let minutes=Math.floor(seconds/60);
+    seconds%=60;
+
+
+    return `
+    ${days} dagen<br>
+    ${hours} uren<br>
+    ${minutes} minuten<br>
+    ${seconds} seconden`;
+}
+
+
+
+function updateTimers(){
+
+    for(let id in sinceMoments){
+        document.getElementById(id).innerHTML =
+            formatDiff(sinceMoments[id]);
+    }
+
+    for(let id in countdowns){
+        document.getElementById(id).innerHTML =
+            formatCountdown(countdowns[id]);
+    }
+}
+
+
+setInterval(updateTimers,1000);
+updateTimers();
+
+
+
+// cursor hearts
+document.addEventListener("mousemove",e=>{
+
+    let h=document.createElement("div");
+
+    h.className="cursor-heart";
+    h.innerHTML="❤️";
+
+    h.style.left=e.clientX+"px";
+    h.style.top=e.clientY+"px";
+
+    document.body.appendChild(h);
+
+    setTimeout(()=>h.remove(),1000);
+});
+
+
+
+// floating hearts
+setInterval(()=>{
+
+    let h=document.createElement("div");
+
+    h.className="floating-heart";
+    h.innerHTML=["❤️","💕","💗","💖"][Math.floor(Math.random()*4)];
+
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=(20+Math.random()*30)+"px";
+    h.style.animationDuration=(5+Math.random()*6)+"s";
+
+    document.body.appendChild(h);
+
+    setTimeout(()=>h.remove(),10000);
+
+},700);
+
+
+</script>
+
+</body>
+</html>
