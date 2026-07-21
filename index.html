@@ -208,35 +208,44 @@ A special day for a very special person ❤️
 <script>
 
 const sinceMoments = {
-    met:"2026-03-21T20:00:00+01:00",
-    date:"2026-04-10T18:00:00+01:00",
-    kiss:"2026-04-22T20:00:00+01:00",
-    promise:"2026-06-28T22:00:00+01:00"
+    met:"2026-03-21T20:00:00",
+    date:"2026-04-10T18:00:00",
+    kiss:"2026-04-22T20:00:00",
+    promise:"2026-06-28T22:00:00"
 };
 
 
 const countdowns = {
-    honeymoon:"2026-09-17T06:00:00+01:00",
-    birthday:"2026-10-03T00:00:00+01:00"
+    honeymoon:"2026-09-17T06:00:00",
+    birthday:"2026-10-03T00:00:00"
 };
 
 
 function formatDiff(start) {
 
-    let diff=new Date()-new Date(start);
+    let from = new Date(start);
+    let now = new Date();
 
-    let minutes=Math.floor(diff/60000);
-    let hours=Math.floor(minutes/60);
-    let days=Math.floor(hours/24);
+    let months = (now.getFullYear() - from.getFullYear()) * 12 
+               + (now.getMonth() - from.getMonth());
 
-    let years=Math.floor(days/365);
-    days%=365;
+    let temp = new Date(from);
+    temp.setMonth(temp.getMonth() + months);
 
-    let months=Math.floor(days/30);
-    days%=30;
+    if (temp > now) {
+        months--;
+        temp.setMonth(temp.getMonth() - 1);
+    }
 
-    hours%=24;
-    minutes%=60;
+    let diff = now - temp;
+
+    let days = Math.floor(diff / 86400000);
+    diff %= 86400000;
+
+    let hours = Math.floor(diff / 3600000);
+    diff %= 3600000;
+
+    let minutes = Math.floor(diff / 60000);
 
     return `
     ${months} months<br>
@@ -244,8 +253,6 @@ function formatDiff(start) {
     ${hours} hours<br>
     ${minutes} minutes`;
 }
-
-
 
 function formatCountdown(target) {
 
